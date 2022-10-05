@@ -64,46 +64,47 @@ def print_footer
 end
 
 def save_students
-   puts "Please enter a filename or enter return to use default file"
-   filename = STDIN.gets.chomp
-   if File.exists?(filename)
-    file = File.open((filename), "w")
+  puts "Please enter a filename or enter return to use default file"
+  @filename = STDIN.gets.chomp
+  save_file
+end
+
+def save_file
+  if File.exists?(@filename)
+    puts "Saved to '#{@filename}'"
+    file = File.open((@filename), "w")
     @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
     end
-    else
+  else
+    puts "Saved to 'students.csv'"
     file = File.open("students.csv", "w")
-    @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-    end
   end
   file.close
 end
 
 def load_students(filename = "students.csv")
   puts "Please enter a filename or enter return to use default file"
-  filename = STDIN.gets.chomp
-    if File.exists?(filename)
-      puts "Loaded from #{filename}"
-      file = File.open(filename, "r")
-      file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
-      add_students(name, cohort = "November")
-      end
+  @filename = STDIN.gets.chomp
+    if File.exists?(@filename)
+      puts "Loaded from #{@filename}"
+      load_file
     else
       puts "Loaded from 'students.csv'"
-      filename = "students.csv"
-      file = File.open(filename, "r")
-      file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
-      add_students(name, cohort = "November")
-      end
+      @filename = "students.csv"
+      load_file
     end
+end
+
+def load_file
+  file = File.open(@filename, "r")
+  file.readlines.each do |line|
+  name, cohort = line.chomp.split(',')
+  add_students(name, cohort = "November")
   file.close
+  end
 end
 
 def add_students(name, cohort = "November")
