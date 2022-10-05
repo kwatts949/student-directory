@@ -72,17 +72,23 @@ end
 def save_file
   if File.exists?(@filename)
     puts "Saved to '#{@filename}'"
-    file = File.open((@filename), "w")
+    file = File.open((@filename), "w") do |file|
     @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
     end
+    end
   else
     puts "Saved to 'students.csv'"
-    file = File.open("students.csv", "w")
+    file = File.open("students.csv", "w") do |file|
+    @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+    end
+    end
   end
-  file.close
 end
 
 def load_students(filename = "students.csv")
@@ -99,11 +105,11 @@ def load_students(filename = "students.csv")
 end
 
 def load_file
-  file = File.open(@filename, "r")
+  file = File.open(@filename, "r") do |file|
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
   add_students(name, cohort = "November")
-  file.close
+  end
   end
 end
 
