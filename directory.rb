@@ -15,7 +15,7 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
-    @students << {name: name, cohort: :november}
+    add_students(name, cohort = "November")
     puts "Now we have #{@students.count} students"
     # get another name from the user
     name = STDIN.gets.chomp
@@ -44,14 +44,19 @@ end
 def process(selection)
   case selection
   when "1"
+    puts "You selected 'add students'"
     input_students
   when "2"
+    puts "You selected 'show students'"
     show_students
   when "3"
+    puts "You selected 'save students'"
     save_students
   when "4"
+    puts "You selected 'load students'"
     load_students
   when "9"
+    puts 'Exiting'
     exit
   else
       puts "I don't know what you meant, please try again"
@@ -82,9 +87,13 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
+  add_students(name, cohort = "November")
   end
   file.close
+end
+
+def add_students(name, cohort = "November")
+  @students << {name: name, cohort: cohort.to_sym}
 end
 
 def try_load_students
