@@ -128,6 +128,11 @@ def try_load_students
   end
 end
 
+def source_code
+  puts "Executing #{File.basename(__FILE__)}"
+end
+
+source_code
 try_load_students
 interactive_menu
 
